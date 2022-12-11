@@ -14,27 +14,6 @@ MEDIAWIKI_BRANCH=$(echo "REL${MEDIAWIKI_VERSION}" | sed 's/\./_/' | sed 's/\..*/
 MEDIAWIKI_IMAGE=mediawiki:${MEDIAWIKI_VERSION}-fpm-alpine
 MWBASE_IMAGE=ghcr.io/zetaoss/zeta-image:mwbase-${MWBASE_VERSION}
 
-cat <<EOF > composer.local.json
-{
-    "require": {
-        "illuminate/view": "8.37.0",
-        "illuminate/container": "8.37.0"
-    },
-    "extra": {
-        "merge-plugin": {
-            "include": [
-                "extensions/AntiSpoof/composer.json",
-                "extensions/AWS/composer.json",
-                "extensions/SendGrid/composer.json",
-                "extensions/TemplateStyles/composer.json",
-                "extensions/Widgets/composer.json",
-                "extensions/Wikibase/composer.json"
-            ]
-        }
-    }
-}
-EOF
-
 cat <<EOF > Dockerfile
 FROM composer:$COMPOSER_VERSION as vendor
 
@@ -70,6 +49,5 @@ RUN set -eux \
 && rm -rf /var/lib/apt/lists/*
 EOF
 
-docker build -t $MWBASE_IMAGE . \
-&& docker push $MWBASE_IMAGE
+docker build -t $MWBASE_IMAGE . && docker push $MWBASE_IMAGE
 
