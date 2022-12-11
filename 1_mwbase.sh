@@ -40,7 +40,6 @@ RUN set -x \
 EOF
 
 docker build -t mwbase .
-
-cd $CUR
-docker cp mwbase:/mediawiki .
+rm -rf $CUR/mediawiki
+docker cp mwbase:/mediawiki $CUR/mediawiki
 
