@@ -5,6 +5,7 @@ MEDIAWIKI_VERSION=1.39.0
 
 ########
 TEMP=$(realpath $(dirname $0)/.temp)
+mkdir -p $TEMP
 
 set -euo pipefail
 
