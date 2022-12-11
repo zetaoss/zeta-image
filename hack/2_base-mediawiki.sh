@@ -5,8 +5,8 @@ MEDIAWIKI_VERSION=1.39.0
 
 ########
 CUR=$(realpath $(dirname $0))/CUR
-IMAGE=base-mediawiki:$MEDIAWIKI_VERSION
-CONTAINER=base-mediawiki-$MEDIAWIKI_VERSION
+TEMP_CONTAINER=temp-mediawiki
+TEMP_IMAGE=temp-mediawiki:$MEDIAWIKI_VERSION
 DIRECTORY=base/mediawiki-$MEDIAWIKI_VERSION
 
 set -euo pipefail
@@ -50,11 +50,11 @@ docker build -t $IMAGE .
 
 set -x
 cd $BASE
-rm -rf mediawiki
-docker ps -a | grep $CONTAINER$ && docker rm -f $CONTAINER
-docker create --name=$CONTAINER $IMAGE
-docker cp $CONTAINER:/mediawiki $DIRECTORY
-docker rm -f $CONTAINER
+rm -rf $DIRECTORY
+docker ps -a | grep $TEMP_CONTAINER$ && docker rm -f $TEMP_CONTAINER
+docker create --name=$TEMP_CONTAINER $TEMP_IMAGE
+docker cp $TEMP_CONTAINER:/mediawiki $DIRECTORY
+docker rm -f $TEMP_CONTAINER
 
 echo
 echo $DIRECTORY generated!
