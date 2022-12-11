@@ -16,10 +16,10 @@ MEDIAWIKI_IMAGE=mediawiki:${MEDIAWIKI_VERSION}-fpm-alpine
 cat <<EOF > Dockerfile
 FROM composer:$COMPOSER_VERSION as vendor
 
-COPY --from=$MEDIAWIKI_IMAGE /var/www/html/ /mediawiki/
+COPY --from=$MEDIAWIKI_IMAGE /var/www/html/ /app/mediawiki/
 
 RUN set -x \
-&& cd /mediawiki/extensions/ \
+&& cd /app/mediawiki/extensions/ \
 && git clone --depth=1 -b v0.11.1 https://github.com/edwardspec/mediawiki-aws-s3.git AWS -c advice.detachedHead=false \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/AntiSpoof.git \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/CheckUser.git \
@@ -34,7 +34,7 @@ RUN set -x \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Wikibase.git && cd Wikibase && git submodule update --init --recursive
 
 RUN set -x \
-&& cd /mediawiki/ \
+&& cd /app/mediawiki/ \
 && rm -f composer.lock \
 && mv composer.local.json-sample composer.local.json \
 && composer install --profile --ignore-platform-reqs --no-dev
@@ -43,9 +43,10 @@ EOF
 set -x
 
 docker build -t mwbase .
-rm -rf $CUR/mediawiki
-docker rm -f mwbase
+cd $CUR
+rm -rf mediawiki
+docker ps -a | grep mwbase$ && docker rm -f mwbase
 docker create --name=mwbase mwbase
-docker cp mwbase:/mediawiki $CUR/mediawiki
+docker cp mwbase:/app/mediawiki ./mediawiki
 docker rm -f mwbase
 
