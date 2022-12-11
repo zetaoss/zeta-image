@@ -4,8 +4,7 @@ COMPOSER_VERSION=2.4
 MEDIAWIKI_VERSION=1.39.0
 
 ########
-APP=$(realpath $(dirname $0))/app
-echo APP=[$APP]
+ROOT=$(realpath $(dirname $0))/..
 
 set -euo pipefail
 
@@ -44,11 +43,10 @@ RUN set -x \
 && cd /mediawiki/ \
 && find -name .git -exec rm -rf {} +
 EOF
+docker build -t mwbase .
 
 set -x
-
-docker build -t mwbase .
-cd $APP
+cd $ROOT
 rm -rf .mwbase
 docker ps -a | grep mwbase$ && docker rm -f mwbase
 docker create --name=mwbase mwbase
