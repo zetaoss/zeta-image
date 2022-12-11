@@ -41,5 +41,7 @@ CUR=$(dirname $0)
 
 docker build -t mwbase .
 rm -rf $CUR/mediawiki
+docker rm -f mwbase
+docker create mwbase --name=mwbase 
 docker cp mwbase:/mediawiki $CUR/mediawiki
 
