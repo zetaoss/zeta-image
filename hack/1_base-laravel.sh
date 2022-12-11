@@ -20,7 +20,6 @@ COPY --from=bitnami/laravel:$LARAVEL_VERSION /opt/bitnami/laravel/ /laravel
 EOF
 docker build -t $TEMP_IMAGE .
 
-set -x
 cd $CUR
 rm -rf $DIRECTORY
 docker ps -a | grep $TEMP_CONTAINER$ && docker rm -f $TEMP_CONTAINER
