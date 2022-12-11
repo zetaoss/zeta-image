@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CUR=$(dirname $0)
+
 COMPOSER_VERSION=2.4
 MEDIAWIKI_VERSION=1.39.0
 
@@ -8,17 +10,16 @@ set -euo pipefail
 
 cd /tmp; rm -rf zeta-images; mkdir zeta-images; cd zeta-images
 
-COMPOSER="composer --no-progress --optimize-autoloader --profile --prefer-dist --no-interaction"
 MEDIAWIKI_BRANCH=$(echo "REL${MEDIAWIKI_VERSION}" | sed 's/\./_/' | sed 's/\..*//')
 MEDIAWIKI_IMAGE=mediawiki:${MEDIAWIKI_VERSION}-fpm-alpine
 
 cat <<EOF > Dockerfile
 FROM composer:$COMPOSER_VERSION as vendor
 
-COPY --from=$MEDIAWIKI_IMAGE /var/www/html/ /html/
+COPY --from=$MEDIAWIKI_IMAGE /var/www/html/ /mediawiki/
 
 RUN set -x \
-&& cd /html/extensions/ \
+&& cd /mediawiki/extensions/ \
 && git clone --depth=1 -b v0.11.1 https://github.com/edwardspec/mediawiki-aws-s3.git AWS -c advice.detachedHead=false \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/AntiSpoof.git \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/CheckUser.git \
@@ -33,10 +34,13 @@ RUN set -x \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Wikibase.git && cd Wikibase && git submodule update --init --recursive
 
 RUN set -x \
-&& cd /html/ \
+&& cd /mediawiki/ \
 && rm -f composer.lock \
 && composer install --profile --ignore-platform-reqs --no-dev
 EOF
 
 docker build -t mwbase .
+
+cd $CUR
+docker cp mwbase:/mediawiki .
 
