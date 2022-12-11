@@ -4,7 +4,7 @@ COMPOSER_VERSION=2.4
 LARAVEL_VERSION=9.3.12
 
 ########
-CUR=$(realpath $(dirname $0))/CUR
+CUR=$(realpath $(dirname $0))
 TEMP_CONTAINER=temp-laravel
 TEMP_IMAGE=temp-laravel:$LARAVEL_VERSION
 DIRECTORY=base/laravel-$LARAVEL_VERSION
