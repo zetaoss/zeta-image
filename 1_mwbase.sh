@@ -37,7 +37,7 @@ RUN set -x \
 && composer install --profile --ignore-platform-reqs --no-dev
 EOF
 
-CUR=$(dirname $0)
+CUR=$(realpath $(dirname $0))
 
 set -euxo pipefail
 
