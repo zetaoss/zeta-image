@@ -1,9 +1,0 @@
-{
-	"@metadata": {
-		"authors": [
-			"BaRaN6161 TURK",
-			"MuratTheTurkish"
-		]
-	},
-	"sendgrid-desc": "MediaWiki'den SendGrid API hizmetliden e-posta gönder."
-}
