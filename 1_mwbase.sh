@@ -16,7 +16,7 @@ MEDIAWIKI_IMAGE=mediawiki:${MEDIAWIKI_VERSION}-fpm-alpine
 cat <<EOF > Dockerfile
 FROM composer:$COMPOSER_VERSION as vendor
 
-COPY --from=$MEDIAWIKI_IMAGE /var/www/html/ /app/mediawiki/
+COPY --from=$MEDIAWIKI_IMAGE /var/www/html/ /mediawiki/
 
 RUN set -x \
 && cd /app/mediawiki/extensions/ \
@@ -34,7 +34,7 @@ RUN set -x \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Wikibase.git && cd Wikibase && git submodule update --init --recursive
 
 RUN set -x \
-&& cd /app/mediawiki/ \
+&& cd /mediawiki/ \
 && rm -f composer.lock \
 && mv composer.local.json-sample composer.local.json \
 && composer install --profile --ignore-platform-reqs --no-dev
@@ -44,9 +44,8 @@ set -x
 
 docker build -t mwbase .
 cd $CUR
-rm -rf mediawiki
+rm -rf mwbase
 docker ps -a | grep mwbase$ && docker rm -f mwbase
 docker create --name=mwbase mwbase
-docker cp mwbase:/app/mediawiki ./mediawiki
+docker cp mwbase:/mediawiki ./mwbase
 docker rm -f mwbase
-
