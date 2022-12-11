@@ -4,7 +4,7 @@ COMPOSER_VERSION=2.4
 MEDIAWIKI_VERSION=1.39.0
 
 ########
-CUR=$(realpath $(dirname $0))
+TEMP=$(realpath $(dirname $0)/.temp)
 
 set -euo pipefail
 
@@ -43,7 +43,7 @@ EOF
 set -x
 
 docker build -t mwbase .
-cd $CUR
+cd $TEMP
 rm -rf mwbase
 docker ps -a | grep mwbase$ && docker rm -f mwbase
 docker create --name=mwbase mwbase
