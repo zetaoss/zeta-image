@@ -4,7 +4,7 @@ COMPOSER_VERSION=2.4
 MEDIAWIKI_VERSION=1.39.0
 
 ########
-CUR=$(realpath $(dirname $0))/CUR
+CUR=$(realpath $(dirname $0))
 TEMP_CONTAINER=temp-mediawiki
 TEMP_IMAGE=temp-mediawiki:$MEDIAWIKI_VERSION
 DIRECTORY=base/mediawiki-$MEDIAWIKI_VERSION
@@ -46,10 +46,9 @@ RUN set -x \
 && cd /mediawiki/ \
 && find -name .git -exec rm -rf {} +
 EOF
-docker build -t $IMAGE .
+docker build -t $TEMP_IMAGE .
 
-set -x
-cd $BASE
+cd $CUR
 rm -rf $DIRECTORY
 docker ps -a | grep $TEMP_CONTAINER$ && docker rm -f $TEMP_CONTAINER
 docker create --name=$TEMP_CONTAINER $TEMP_IMAGE
