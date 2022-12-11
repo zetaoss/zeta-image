@@ -5,8 +5,8 @@ LARAVEL_VERSION=9.3.12
 
 ########
 CUR=$(realpath $(dirname $0))/CUR
-TEMP_IMAGE=temp:laravel-$LARAVEL_VERSION
-TEMP_CONTAINER=temp-laravel-$LARAVEL_VERSION
+TEMP_CONTAINER=temp-laravel
+TEMP_IMAGE=temp-laravel:$LARAVEL_VERSION
 DIRECTORY=base/laravel-$LARAVEL_VERSION
 
 set -euo pipefail
