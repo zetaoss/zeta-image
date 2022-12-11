@@ -4,9 +4,10 @@ COMPOSER_VERSION=2.4
 LARAVEL_VERSION=9.3.12
 
 ########
-BASE=$(realpath $(dirname $0))/base
-IMAGE=base-laravel:$LARAVEL_VERSION
-CONTAINER=base-laravel-$LARAVEL_VERSION
+CUR=$(realpath $(dirname $0))/CUR
+TEMP_IMAGE=temp:laravel-$LARAVEL_VERSION
+TEMP_CONTAINER=temp-laravel-$LARAVEL_VERSION
+DIRECTORY=base/laravel-$LARAVEL_VERSION
 
 set -euo pipefail
 
@@ -20,13 +21,13 @@ EOF
 docker build -t $IMAGE .
 
 set -x
-cd $BASE
-rm -rf laravel
-docker ps -a | grep $CONTAINER$ && docker rm -f $CONTAINER
-docker create --name=$CONTAINER $IMAGE
-docker cp $CONTAINER:/laravel laravel-${LARAVEL_VERSION}
-docker rm -f $CONTAINER
+cd $CUR
+rm -rf $DIRECTORY
+docker ps -a | grep $TEMP_CONTAINER$ && docker rm -f $TEMP_CONTAINER
+docker create --name=$TEMP_CONTAINER $TEMP_IMAGE
+docker cp $TEMP_CONTAINER:/laravel $DIRECTORY
+docker rm -f $TEMP_CONTAINER
 
 echo
-echo base/laravel-${LARAVEL_VERSION} generated!
+echo $DIRECTORY generated!
 echo
