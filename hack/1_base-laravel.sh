@@ -4,7 +4,7 @@ COMPOSER_VERSION=2.4
 LARAVEL_VERSION=9.3.12
 
 ########
-CUR=$(realpath $(dirname $0))
+BASE=$(realpath $(dirname $0))/../base
 
 set -euo pipefail
 
@@ -18,10 +18,10 @@ EOF
 docker build -t larabase .
 
 set -x
-cd $CUR
+cd $BASE
 rm -rf laravel
 docker ps -a | grep larabase$ && docker rm -f larabase
 docker create --name=larabase larabase
 docker cp larabase:/laravel laravel
-docker rm -f laravel
+docker rm -f larabase
 

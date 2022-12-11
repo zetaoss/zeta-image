@@ -4,7 +4,7 @@ COMPOSER_VERSION=2.4
 MEDIAWIKI_VERSION=1.39.0
 
 ########
-CUR=$(realpath $(dirname $0))
+BASE=$(realpath $(dirname $0))/../base
 
 set -euo pipefail
 
@@ -46,7 +46,7 @@ EOF
 docker build -t mwbase .
 
 set -x
-cd $CUR
+cd $BASE
 rm -rf mediawiki
 docker ps -a | grep mwbase$ && docker rm -f mwbase
 docker create --name=mwbase mwbase
