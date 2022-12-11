@@ -33,14 +33,14 @@ RUN set -x \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Widgets.git \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Wikibase.git && cd Wikibase && git submodule update --init --recursive
 
-RUN cd /mediawiki/extensions/ \
-&& rm -rf /mediawiki/extensions/*/.git
-
 RUN set -x \
 && cd /mediawiki/ \
 && rm -f composer.lock \
 && mv composer.local.json-sample composer.local.json \
 && composer install --profile --ignore-platform-reqs --no-dev
+
+RUN set -x \
+&& find -name .git -exec rm -rf {} +
 EOF
 
 set -x
