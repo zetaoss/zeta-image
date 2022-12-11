@@ -1,8 +1,0 @@
-{
-	"@metadata": {
-		"authors": [
-			"Xuacu"
-		]
-	},
-	"sendgrid-desc": "Unviar correos electrónicos per aciu del serviciu API SendGrid dende MediaWiki."
-}
