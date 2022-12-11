@@ -36,6 +36,7 @@ RUN set -x \
 RUN set -x \
 && cd /mediawiki/ \
 && rm -f composer.lock \
+&& mv composer.local.json-sample composer.local.json \
 && composer install --profile --ignore-platform-reqs --no-dev
 EOF
 
