@@ -25,3 +25,6 @@ docker create --name=larabase larabase
 docker cp larabase:/laravel laravel-${LARAVEL_VERSION}
 docker rm -f larabase
 
+echo
+echo base/laravel-${LARAVEL_VERSION} generated!
+echo
