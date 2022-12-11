@@ -39,6 +39,8 @@ EOF
 
 CUR=$(dirname $0)
 
+set -euxo pipefail
+
 docker build -t mwbase .
 rm -rf $CUR/mediawiki
 docker rm -f mwbase
