@@ -2,7 +2,6 @@
 
 COMPOSER_VERSION=2.4
 MEDIAWIKI_VERSION=1.39.0
-MWBASE_VERSION=0.1.0
 
 ########
 set -euo pipefail
@@ -12,7 +11,6 @@ cd /tmp; rm -rf zeta-images; mkdir zeta-images; cd zeta-images
 COMPOSER="composer --no-progress --optimize-autoloader --profile --prefer-dist --no-interaction"
 MEDIAWIKI_BRANCH=$(echo "REL${MEDIAWIKI_VERSION}" | sed 's/\./_/' | sed 's/\..*//')
 MEDIAWIKI_IMAGE=mediawiki:${MEDIAWIKI_VERSION}-fpm-alpine
-MWBASE_IMAGE=ghcr.io/zetaoss/zeta-image:mwbase-${MWBASE_VERSION}
 
 cat <<EOF > Dockerfile
 FROM composer:$COMPOSER_VERSION as vendor
@@ -38,14 +36,7 @@ RUN set -x \
 && cd /html/ \
 && rm -f composer.lock \
 && composer install --profile --ignore-platform-reqs --no-dev
-
-FROM debian:10
-COPY --from=vendor /html/ /html/
-RUN set -eux \
-&& apt-get update \
-&& apt-get -y install git \
-&& rm -rf /var/lib/apt/lists/*
 EOF
 
-docker build -t $MWBASE_IMAGE . && docker push $MWBASE_IMAGE
+docker build -t mwbase .
 
