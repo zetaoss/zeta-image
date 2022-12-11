@@ -4,6 +4,8 @@ COMPOSER_VERSION=2.4
 MEDIAWIKI_VERSION=1.39.0
 
 ########
+CUR=$(realpath $(dirname $0))
+
 set -euo pipefail
 
 cd /tmp; rm -rf zeta-images; mkdir zeta-images; cd zeta-images
@@ -37,9 +39,7 @@ RUN set -x \
 && composer install --profile --ignore-platform-reqs --no-dev
 EOF
 
-CUR=$(realpath $(dirname $0))
-
-set -euxo pipefail
+set -x
 
 docker build -t mwbase .
 rm -rf $CUR/mediawiki
