@@ -4,7 +4,10 @@ COMPOSER_VERSION=2.4
 MEDIAWIKI_VERSION=1.39.0
 
 ########
-BASE=$(realpath $(dirname $0))/base
+CUR=$(realpath $(dirname $0))/CUR
+IMAGE=base-mediawiki:$MEDIAWIKI_VERSION
+CONTAINER=base-mediawiki-$MEDIAWIKI_VERSION
+DIRECTORY=base/mediawiki-$MEDIAWIKI_VERSION
 
 set -euo pipefail
 
@@ -43,16 +46,16 @@ RUN set -x \
 && cd /mediawiki/ \
 && find -name .git -exec rm -rf {} +
 EOF
-docker build -t base-mediawiki .
+docker build -t $IMAGE .
 
 set -x
 cd $BASE
 rm -rf mediawiki
-docker ps -a | grep base-mediawiki$ && docker rm -f base-mediawiki
-docker create --name=base-mediawiki base-mediawiki
-docker cp base-mediawiki:/mediawiki mediawiki-${MEDIAWIKI_VERSION}
-docker rm -f base-mediawiki
+docker ps -a | grep $CONTAINER$ && docker rm -f $CONTAINER
+docker create --name=$CONTAINER $IMAGE
+docker cp $CONTAINER:/mediawiki $DIRECTORY
+docker rm -f $CONTAINER
 
 echo
-echo base/mediawiki-${MEDIAWIKI_VERSION} generated!
+echo $DIRECTORY generated!
 echo
