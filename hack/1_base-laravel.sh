@@ -15,15 +15,15 @@ FROM composer:$COMPOSER_VERSION as vendor
 
 COPY --from=bitnami/laravel:$LARAVEL_VERSION /opt/bitnami/laravel/ /laravel
 EOF
-docker build -t larabase .
+docker build -t base-laravel .
 
 set -x
 cd $BASE
 rm -rf laravel
-docker ps -a | grep larabase$ && docker rm -f larabase
-docker create --name=larabase larabase
-docker cp larabase:/laravel laravel-${LARAVEL_VERSION}
-docker rm -f larabase
+docker ps -a | grep base-laravel$ && docker rm -f base-laravel
+docker create --name=base-laravel base-laravel
+docker cp base-laravel:/laravel laravel-${LARAVEL_VERSION}
+docker rm -f base-laravel
 
 echo
 echo base/laravel-${LARAVEL_VERSION} generated!
