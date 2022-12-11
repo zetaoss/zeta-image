@@ -43,15 +43,15 @@ RUN set -x \
 && cd /mediawiki/ \
 && find -name .git -exec rm -rf {} +
 EOF
-docker build -t mwbase .
+docker build -t base-mediawiki .
 
 set -x
 cd $BASE
 rm -rf mediawiki
-docker ps -a | grep mwbase$ && docker rm -f mwbase
-docker create --name=mwbase mwbase
-docker cp mwbase:/mediawiki mediawiki-${MEDIAWIKI_VERSION}
-docker rm -f mwbase
+docker ps -a | grep base-mediawiki$ && docker rm -f base-mediawiki
+docker create --name=base-mediawiki base-mediawiki
+docker cp base-mediawiki:/mediawiki mediawiki-${MEDIAWIKI_VERSION}
+docker rm -f base-mediawiki
 
 echo
 echo base/mediawiki-${MEDIAWIKI_VERSION} generated!
