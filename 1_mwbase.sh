@@ -34,8 +34,6 @@ RUN set -x \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Widgets.git \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Wikibase.git && cd Wikibase && git submodule update --init --recursive
 
-COPY composer.local.json /html/
-
 RUN set -x \
 && cd /html/ \
 && rm -f composer.lock \
