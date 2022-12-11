@@ -18,7 +18,7 @@ FROM composer:$COMPOSER_VERSION as vendor
 
 COPY --from=bitnami/laravel:$LARAVEL_VERSION /opt/bitnami/laravel/ /laravel
 EOF
-docker build -t $IMAGE .
+docker build -t $TEMP_IMAGE .
 
 set -x
 cd $CUR
