@@ -5,6 +5,8 @@ LARAVEL_VERSION=9.3.12
 
 ########
 BASE=$(realpath $(dirname $0))/base
+IMAGE=base-laravel:$LARAVEL_VERSION
+CONTAINER=base-laravel-$LARAVEL_VERSION
 
 set -euo pipefail
 
@@ -15,15 +17,15 @@ FROM composer:$COMPOSER_VERSION as vendor
 
 COPY --from=bitnami/laravel:$LARAVEL_VERSION /opt/bitnami/laravel/ /laravel
 EOF
-docker build -t base-laravel .
+docker build -t $IMAGE .
 
 set -x
 cd $BASE
 rm -rf laravel
-docker ps -a | grep base-laravel$ && docker rm -f base-laravel
-docker create --name=base-laravel base-laravel
-docker cp base-laravel:/laravel laravel-${LARAVEL_VERSION}
-docker rm -f base-laravel
+docker ps -a | grep $CONTAINER$ && docker rm -f $CONTAINER
+docker create --name=$CONTAINER $IMAGE
+docker cp $CONTAINER:/laravel laravel-${LARAVEL_VERSION}
+docker rm -f $CONTAINER
 
 echo
 echo base/laravel-${LARAVEL_VERSION} generated!
