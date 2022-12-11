@@ -4,8 +4,7 @@ COMPOSER_VERSION=2.4
 MEDIAWIKI_VERSION=1.39.0
 
 ########
-TEMP=$(realpath $(dirname $0)/../.temp)
-mkdir -p $TEMP
+ROOT=$(realpath $(dirname $0)/..)
 
 set -euo pipefail
 
@@ -34,6 +33,9 @@ RUN set -x \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Widgets.git \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Wikibase.git && cd Wikibase && git submodule update --init --recursive
 
+RUN cd /mediawiki/extensions/ \
+&& rm -rf /mediawiki/extensions/*/.git
+
 RUN set -x \
 && cd /mediawiki/ \
 && rm -f composer.lock \
@@ -44,9 +46,9 @@ EOF
 set -x
 
 docker build -t mwbase .
-cd $TEMP
-rm -rf mwbase
+cd $ROOT
+rm -rf .mwbase
 docker ps -a | grep mwbase$ && docker rm -f mwbase
 docker create --name=mwbase mwbase
-docker cp mwbase:/mediawiki ./mwbase
+docker cp mwbase:/mediawiki .mwbase
 docker rm -f mwbase
