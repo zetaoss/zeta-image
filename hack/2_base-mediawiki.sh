@@ -53,3 +53,6 @@ docker create --name=mwbase mwbase
 docker cp mwbase:/mediawiki mediawiki-${MEDIAWIKI_VERSION}
 docker rm -f mwbase
 
+echo
+echo base/mediawiki-${MEDIAWIKI_VERSION} generated!
+echo
