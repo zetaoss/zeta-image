@@ -20,7 +20,7 @@ FROM composer:$COMPOSER_VERSION as vendor
 COPY --from=$MEDIAWIKI_IMAGE /var/www/html/ /mediawiki/
 
 RUN set -x \
-&& cd /app/mediawiki/extensions/ \
+&& cd /mediawiki/extensions/ \
 && git clone --depth=1 -b v0.11.1 https://github.com/edwardspec/mediawiki-aws-s3.git AWS -c advice.detachedHead=false \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/AntiSpoof.git \
 && git clone --depth=1 -b $MEDIAWIKI_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/CheckUser.git \
