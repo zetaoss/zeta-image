@@ -1,7 +1,5 @@
 #!/bin/bash
 
-CUR=$(dirname $0)
-
 COMPOSER_VERSION=2.4
 MEDIAWIKI_VERSION=1.39.0
 
@@ -38,6 +36,8 @@ RUN set -x \
 && rm -f composer.lock \
 && composer install --profile --ignore-platform-reqs --no-dev
 EOF
+
+CUR=$(dirname $0)
 
 docker build -t mwbase .
 rm -rf $CUR/mediawiki
